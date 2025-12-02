@@ -32,7 +32,20 @@ T GetModuleAddress(std::string module)
 	}
 
 	return {};
-}	
+}
+
+template<typename T = uintptr_t>
+T GetModuleAddress(SceKernelModule module)
+{
+	SceKernelModuleInfo moduleInfo;
+	moduleInfo.size = sizeof(SceKernelModuleInfo);
+	if (sceKernelGetModuleInfo(module, &moduleInfo) == 0)
+	{
+		return reinterpret_cast<T>(moduleInfo.segmentInfo[0].address);
+	}
+
+	return {};
+}
 
 template<typename T = uintptr_t>
 T GetExport(int handle, std::string function)

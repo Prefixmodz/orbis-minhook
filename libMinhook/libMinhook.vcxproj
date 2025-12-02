@@ -52,11 +52,12 @@
     <ClCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalIncludeDirectories>..\dependencies\StubMaker\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\StubMaker\Include\;$(SolutionDir)dependencies\StubMaker\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStd>Cpp17</CppLanguageStd>
       <CppExceptions>true</CppExceptions>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ExtendedDiagnostics>true</ExtendedDiagnostics>
     </ClCompile>
     <Link>
       <Addressing>NonAslr</Addressing>
@@ -66,7 +67,13 @@
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <OptimizationLevel>Level2</OptimizationLevel>
-      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\StubMaker\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)dependencies\StubMaker\Include\;$(SolutionDir)dependencies\StubMaker\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ExtendedDiagnostics>true</ExtendedDiagnostics>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStd>Cpp17</CppLanguageStd>
+      <CppExceptions>true</CppExceptions>
+      <InlinedScopes>true</InlinedScopes>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
