@@ -420,12 +420,11 @@ MH_STATUS MH_Initialize(VOID) {
 
 	if (!lpLibkernelBase)
 	{
-		auto base = GetModuleAddress<UINT64>("libkernel.sprx");
-	
-		// check for libkernel_sys later.
+		auto base = GetModuleAddress<UINT64>(8193); /*GetModuleAddress<UINT64>("libkernel.sprx")*/;
+
 		if(!base)
 		{
-			printf("Failed to get libkernel.sprx address\n");
+			printf("Failed to get libkernel address\n");
 			return MH_ERROR_MODULE_NOT_FOUND;
 		}
 

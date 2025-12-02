@@ -492,7 +492,7 @@ HANDLE OpenThread(DWORD dwDesiredAccess, BOOL bInheritHandle, DWORD dwThreadId)
 	auto libkernel = lpLibkernelBase;
 	if (libkernel == 0)
 	{
-		printf("Failed to get libkernel.sprx address\n");
+		printf("Failed to get libkernel address\n");
 		return 0;
 	}
 
