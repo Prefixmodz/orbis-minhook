@@ -420,15 +420,17 @@ MH_STATUS MH_Initialize(VOID) {
 
 	if (!lpLibkernelBase)
 	{
-		auto base = GetModuleAddress<UINT64>(8193); /*GetModuleAddress<UINT64>("libkernel.sprx")*/;
+		// Get the base address of the loaded kernel interface library by it's handle
+		// wether it be the UL lib sys or web since they all adopt the same handle
+		auto libkernel = GetModuleAddress<UINT64>(8193);
 
-		if(!base)
+		if(!libkernel)
 		{
 			printf("Failed to get libkernel address\n");
 			return MH_ERROR_MODULE_NOT_FOUND;
 		}
 
-		lpLibkernelBase = base;
+		lpLibkernelBase = libkernel;
 	}
 
 	EnterSpinLock();

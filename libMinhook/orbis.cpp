@@ -2,10 +2,10 @@
 
 thread* GetByName(const char* name)
 {
-	auto libkernel = GetModuleAddress<uintptr_t>("libkernel.sprx");
+	auto libkernel = GetModuleAddress(8193);
 	if (libkernel == 0)
 	{
-		printf("Failed to get libkernel.sprx address\n");
+		printf("Failed to get libkernel address\n");
 		return nullptr;
 	}
 
@@ -23,22 +23,25 @@ thread* GetByName(const char* name)
 
 		currentThread = currentThread->next;
 	}
+
 	return nullptr;
 }
 
 thread* GetById(uint32_t id)
 {
-	auto libkernel = GetModuleAddress<uintptr_t>("libkernel.sprx");
+	auto libkernel = GetModuleAddress(8193);
 	if (libkernel == 0)
 	{
-		printf("Failed to get libkernel.sprx address\n");
+		printf("Failed to get libkernel address\n");
 		return nullptr;
 	}
+
 	auto currentThread = *reinterpret_cast<thread**>(GetAbsoluteAddress(0x0058248, libkernel));
 	while (currentThread != nullptr)
 	{
 		if (currentThread->tid == id)
 			return currentThread;
+
 		currentThread = currentThread->next;
 	}
 	return nullptr;

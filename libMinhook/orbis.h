@@ -50,8 +50,8 @@ T GetRelativeAddress(uintptr_t address, uintptr_t base)
 template<typename T = uintptr_t>
 T GetExport(SceKernelModule handle, std::string symbol)
 {
-	uint64_t libSymbolAddr;
-	if (sceKernelDlsym(handle, symbol.data();, (void**)&libSymbolAddr) == 0)
+	uint64_t libSymbolAddr = 0;
+	if (sceKernelDlsym(handle, symbol.data(), (void**)&libSymbolAddr) == 0)
 	{
 		return reinterpret_cast<T>(libSymbolAddr);
 	}
