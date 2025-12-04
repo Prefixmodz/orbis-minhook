@@ -6,9 +6,39 @@
 #include <KernelExt.h>
 
 template<typename T = uintptr_t>
+T GetModuleAddress(std::string module)
+{
+	SceKernelModule handle = sceKernelLoadStartModule(module.data(), 0, nullptr, 0, nullptr, nullptr);
+	if (handle > 0)
+	{
+		SceKernelModuleInfo moduleInfo;
+		moduleInfo.size = sizeof(SceKernelModuleInfo);
+		if (sceKernelGetModuleInfo(handle, &moduleInfo) == 0)
+		{
+			return reinterpret_cast<T>(moduleInfo.segmentInfo[0].address);
+		}
+	}
+
+	return 0;
+}
+
+template<typename T = uintptr_t>
+T GetModuleAddress(SceKernelModule handle)
+{
+	SceKernelModuleInfo moduleInfo;
+	moduleInfo.size = sizeof(SceKernelModuleInfo);
+	if (sceKernelGetModuleInfo(handle, &moduleInfo) == 0)
+	{
+		return reinterpret_cast<T>(moduleInfo.segmentInfo[0].address);
+	}
+
+	return 0;
+}
+
+template<typename T = uintptr_t>
 T GetAbsoluteAddress(uintptr_t address, uintptr_t base = -1)
 {
-	return reinterpret_cast<T>((base == -1 ? 0x400000 : base) + address);
+	return reinterpret_cast<T>((base == -1 ? GetModuleAddress(0) : base) + address);
 }
 
 template<typename T = uintptr_t>
@@ -18,45 +48,15 @@ T GetRelativeAddress(uintptr_t address, uintptr_t base)
 }
 
 template<typename T = uintptr_t>
-T GetModuleAddress(std::string module)
+T GetExport(SceKernelModule handle, std::string symbol)
 {
-	int library = sceKernelLoadStartModule(module.data(), 0, nullptr, 0, nullptr, nullptr);
-	if (library > 0)
+	uint64_t libSymbolAddr;
+	if (sceKernelDlsym(handle, symbol.data();, (void**)&libSymbolAddr) == 0)
 	{
-		SceKernelModuleInfo moduleInfo;
-		moduleInfo.size = sizeof(SceKernelModuleInfo);
-		if (sceKernelGetModuleInfo(library, &moduleInfo) == 0)
-		{
-			return reinterpret_cast<T>(moduleInfo.segmentInfo[0].address);
-		}
+		return reinterpret_cast<T>(libSymbolAddr);
 	}
 
-	return {};
-}
-
-template<typename T = uintptr_t>
-T GetModuleAddress(SceKernelModule module)
-{
-	SceKernelModuleInfo moduleInfo;
-	moduleInfo.size = sizeof(SceKernelModuleInfo);
-	if (sceKernelGetModuleInfo(module, &moduleInfo) == 0)
-	{
-		return reinterpret_cast<T>(moduleInfo.segmentInfo[0].address);
-	}
-
-	return {};
-}
-
-template<typename T = uintptr_t>
-T GetExport(int handle, std::string function)
-{
-	uint64_t libraryFunctionAddr;
-	if (sceKernelDlsym(handle, function.data(), (void**)&libraryFunctionAddr) == 0)
-	{
-		return (T)libraryFunctionAddr;
-	}
-	else
-		return 0;
+	return 0;
 }
 
 thread* GetByName(const char* name);
